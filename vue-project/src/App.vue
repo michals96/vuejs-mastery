@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <Header @toggle-add-task="toggleAddTask" title="Task tracker" :showAddTask="showAddTask"/>
+    <Header :showAddTask="showAddTask" title="Task tracker" @toggle-add-task="toggleAddTask"/>
     <div v-show="showAddTask">
       <AddTask @add-task="addTask"></AddTask>
     </div>
@@ -38,11 +38,15 @@ export default {
 
       const data = await res.json()
 
-      this.tasks =[...this.tasks, data]
+      this.tasks = [...this.tasks, data]
     },
-    deleteTask(id) {
+    async deleteTask(id) {
       if (confirm('Are you sure?')) {
-        this.tasks = this.tasks.filter(task => task.id !== id)
+        const res = await fetch(`http://localhost:5000/tasks/${id}`, {
+          method: 'DELETE'
+        })
+
+        res.status === 200 ? this.tasks = this.tasks.filter(task => task.id !== id) : alert("Error deleting task")
       }
     },
     toggleReminder(id) {
@@ -59,7 +63,7 @@ export default {
       return data;
     },
     async fetchTask(id) {
-      const res = await fetch('http://localhost:5000/tasks/${id}')
+      const res = await fetch(`http://localhost:5000/tasks/${id}`)
 
       const data = await res.json()
 
