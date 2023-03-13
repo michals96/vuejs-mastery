@@ -16,7 +16,7 @@
       "id": 32327,
       "text": "My new task",
       "day": "March 100th",
-      "reminder": true
+      "reminder": false
     }
   ]
 }
